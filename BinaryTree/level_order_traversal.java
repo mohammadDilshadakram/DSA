@@ -1,13 +1,12 @@
 
 import java.util.*;
 
-
-
 public class level_order_traversal {
     public static class Node {
         int data;
         Node left;
         Node right;
+
         Node(int data) {
             this.data = data;
             this.left = null;
@@ -15,18 +14,35 @@ public class level_order_traversal {
         }
     }
 
-    public static void lot(Node root,Queue<Integer>q){
-        if (root==null) {
+    public static void lot(Node root) {
+        if (root == null) {
             return;
         }
-        q.add(root.data);
-        System.out.print(q.poll());
-        
-        lot(root.left,q);
-        lot(root.right,q);
-        
+        Queue<Node> q=new LinkedList<>();
+        q.add(root);
+        q.add(null);
+        while (!q.isEmpty()) {
+            Node curr = q.remove();
+            if (curr == null) {
+                System.out.println();
+                if (q.isEmpty()) {
+                    break;
+                } else {
+                    q.add(null);
+                }
+            } else {
+                System.out.print(curr.data+" ");
+                
+                if (curr.left != null) {
+                    q.add(curr.left);
+                }
+                if (curr.right != null) {
+                    q.add(curr.right);
+                }
 
+            }
 
+        }
     }
 
     public static void main(String[] args) {
@@ -39,8 +55,8 @@ public class level_order_traversal {
         Node d = new Node(5);
         b.left = c;
         b.right = d;
-        Queue<Integer> q=new LinkedList<>();
-        lot(root, q);
-        
+        Queue<Node> q = new LinkedList<>();
+        lot(root);
+
     }
 }
