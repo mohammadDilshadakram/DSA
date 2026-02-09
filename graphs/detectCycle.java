@@ -1,33 +1,38 @@
 import java.util.*;
+
 public class detectCycle {
 
-    public static void addEdge(int u,int v,ArrayList<Integer> graph[]){
+    public static void addEdge(int u, int v, ArrayList<Integer> graph[]) {
         graph[u].add(v);
         graph[v].add(u);
     }
 
-    public static boolean hasCycle(ArrayList<Integer>graph[],int curr,int parent,boolean visited[]){
+    public static boolean hasCycle(ArrayList<Integer> graph[], int curr, int parent, boolean visited[]) {
 
-        visited[curr]=true;
+        visited[curr] = true;
         for (int neighbour : graph[curr]) {
-            if (visited[neighbour] && parent==neighbour) {
-                 System.out.println("The graph has cycle");
+            if (visited[neighbour] && parent != neighbour) {
+
                 return true;
             }
             if (!visited[neighbour]) {
-                hasCycle(graph, neighbour, curr,visited);
+                if (hasCycle(graph, neighbour, curr, visited)) {
+                    return true;
+                }
+
             }
         }
-        System.out.println("The graph has no cycle");
+
         return false;
     }
+
     public static void main(String[] args) {
-        Scanner sc=new Scanner(System.in);
-        int v=8;
-        ArrayList<Integer> graph[]=new ArrayList[v];
-        boolean visited[]=new boolean[v];
+        Scanner sc = new Scanner(System.in);
+        int v = 8;
+        ArrayList<Integer> graph[] = new ArrayList[v];
+        boolean visited[] = new boolean[v];
         for (int i = 0; i < graph.length; i++) {
-            graph[i]=new ArrayList<>();
+            graph[i] = new ArrayList<>();
         }
         addEdge(1, 2, graph);
         addEdge(1, 3, graph);
@@ -38,9 +43,17 @@ public class detectCycle {
         addEdge(6, 3, graph);
 
         for (int i = 1; i < graph.length; i++) {
-            hasCycle(graph, i,-1,visited);
+            if (!visited[i]) {
+                if (hasCycle(graph, i, -1, visited)) {
+                    System.out.println("The graph has cycle");
+                    return;
+                }
+            } 
+                
+               
+            
         }
-
+        System.out.println("The graph does not have cycle");
 
     }
 }
