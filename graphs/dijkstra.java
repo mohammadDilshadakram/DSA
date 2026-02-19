@@ -11,17 +11,32 @@ public class dijkstra {
             this.wt=wt;
         }
     }
-    public static void helper(ArrayList<Edge>graph[],int src,int dist[],boolean visited[],PriorityQueue<Integer>q){
-        q.add(src);
+    public static class pair implements Comparable<pair>{   
+        int v;
+        int dist;
+        pair(int v,int dist){
+        this.v=v;
+        this.dist=dist;
+        }
+        public int compareTo(pair p2){
+            return Integer.compare(this.dist,p2.dist);
+        }
+    }
+    public static void helper(ArrayList<Edge>graph[],int src,int dist[],boolean visited[],PriorityQueue<pair>q){
+        q.add(new pair(src, 0));
         while (!q.isEmpty()) {
-            int curr=q.poll();
-            visited[curr]=true;
-            for (int i = 0; i < graph[curr].size(); i++) {
-                Edge e=graph[curr].get(i);
-                if (dist[curr]+e.wt<dist[e.dest]) {
-                dist[e.dest]=dist[curr]+e.wt;
+            pair curr=q.poll();
+            if(visited[curr.v]){
+                continue;
+
+            }
+            visited[curr.v]=true;
+            for (int i = 0; i < graph[curr.v].size(); i++) {
+                Edge e=graph[curr.v].get(i);
+                if (dist[curr.v]+e.wt<dist[e.dest]) {
+                dist[e.dest]=dist[curr.v]+e.wt;
                 if (!visited[e.dest]) {
-                    q.add(e.dest);
+                    q.add(new pair(e.dest, dist[e.dest]));
                 }
               }
             }
@@ -37,7 +52,7 @@ public class dijkstra {
 
         int dist[]=new int[5];
         boolean visited[]=new boolean[5];
-        PriorityQueue<Integer>q=new PriorityQueue<>((a,b)->dist[a]-dist[b]);
+        PriorityQueue<pair>q=new PriorityQueue<>();
 
         //0 vertice
         graph[0].add(new Edge(0, 1, 4));
